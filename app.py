@@ -13,6 +13,10 @@ import requests
 # SAMPLE IMAGES
 # ─────────────────────────────────────────────
 SAMPLE_IMAGES = {
+    "🌍 RGB Image (JPEG)": {
+        "path": "samples/sample_rgb.jpeg",
+        "desc": "Standard RGB image — good for testing Color Space transforms & adjustments."
+    },
     "🛰️ Landsat 8 — All Bands (7 bands)": {
         "path": "samples/landsat8_allbands.tif",
         "desc": "Full 7-band Landsat 8 scene (SR_B1–SR_B7). Try Spectral Filter, NDVI, SAVI, EVI and all RGB composites."
