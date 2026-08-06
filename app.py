@@ -446,7 +446,7 @@ if not st.session_state.image_data:
     st.markdown("""
     <div class="upload-zone" style="height: 280px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
         <div style="font-size:4rem; line-height: 1;">🛰️</div>
-        <h3 style="color:#63b3ed; margin:12px 0 8px">Upload a Satellite Image to Begin</h3>
+        <div style="font-size: 1.17em; font-weight: bold; color:#63b3ed; margin:12px 0 8px">Upload a Satellite Image to Begin</div>
         <p style="color:#718096; margin:0;">Supports GeoTIFF (.tif/.tiff), JPEG2000 (.jp2), PNG, JPG</p>
         <p style="color:#718096; font-size:0.85rem; margin:0;">Works with Sentinel-2, Landsat-8, and generic multi-band imagery</p>
     </div>
