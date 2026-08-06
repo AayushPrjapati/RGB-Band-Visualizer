@@ -7,6 +7,31 @@ import cv2
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import io
+import requests
+
+# ─────────────────────────────────────────────
+# SAMPLE IMAGES
+# ─────────────────────────────────────────────
+SAMPLE_IMAGES = {
+    "🌍 RGB Natural (3-band GeoTIFF)": {
+        "url": "https://raw.githubusercontent.com/rasterio/rasterio/main/tests/data/RGB.byte.tif",
+        "desc": "A classic 3-band RGB GeoTIFF — great for RGB Composite & Color Space modes."
+    },
+    "🛰️ Multi-band Float (Sentinel-style)": {
+        "url": "https://raw.githubusercontent.com/rasterio/rasterio/main/tests/data/float32.tif",
+        "desc": "Single-band float raster — try Single Band mode with different colormaps."
+    },
+    "🌊 Small Raster (Quick Test)": {
+        "url": "https://raw.githubusercontent.com/rasterio/rasterio/main/tests/data/shade.tif",
+        "desc": "A small hillshade raster — fast to load, good for testing adjustments."
+    },
+}
+
+@st.cache_data(show_spinner="Fetching sample image...")
+def fetch_sample(url: str) -> bytes:
+    r = requests.get(url, timeout=15)
+    r.raise_for_status()
+    return r.content
 
 # ─────────────────────────────────────────────
 # PAGE CONFIG
@@ -287,7 +312,37 @@ st.markdown("""
 # SIDEBAR — FILE UPLOAD + CONTROLS
 # ─────────────────────────────────────────────
 with st.sidebar:
-    st.markdown('<p class="section-header">📁 Upload Image</p>', unsafe_allow_html=True)
+    # ── Sample Images ──
+    st.markdown('<p class="section-header">🧪 Try a Sample</p>', unsafe_allow_html=True)
+    sample_choice = st.selectbox(
+        "Pick a built-in image",
+        ["— Upload your own —"] + list(SAMPLE_IMAGES.keys()),
+        help="No file? Try one of these real GeoTIFF samples."
+    )
+
+    if sample_choice != "— Upload your own —":
+        sample_info = SAMPLE_IMAGES[sample_choice]
+        st.markdown(f'<div class="info-box">{sample_info["desc"]}</div>', unsafe_allow_html=True)
+        if st.button("Load Sample", use_container_width=True):
+            try:
+                raw = fetch_sample(sample_info["url"])
+                with MemoryFile(raw) as mf:
+                    with mf.open() as src:
+                        image_data = [src.read(i) for i in range(1, src.count + 1)]
+                        meta = src.meta.copy()
+                        band_names = (
+                            [d if d and d.strip() else f"Band {i+1}" for i, d in enumerate(src.descriptions)]
+                            if src.descriptions else [f"Band {i+1}" for i in range(src.count)]
+                        )
+                st.session_state.image_data = image_data
+                st.session_state.band_names = band_names
+                st.session_state.meta = meta
+                st.session_state.filename = sample_choice
+                st.success(f"✅ Loaded sample — {src.count} band(s)")
+            except Exception as e:
+                st.error(f"❌ Failed to load sample: {e}")
+
+    st.markdown('<p class="section-header">📁 Upload Your Own</p>', unsafe_allow_html=True)
     uploaded = st.file_uploader(
         "Supported: GeoTIFF, JP2, PNG, JPG",
         type=["tif", "tiff", "jp2", "jpg", "jpeg", "png", "bmp", "img"],
