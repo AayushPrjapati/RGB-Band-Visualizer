@@ -13,17 +13,13 @@ import requests
 # SAMPLE IMAGES
 # ─────────────────────────────────────────────
 SAMPLE_IMAGES = {
-    "🌍 RGB Natural (3 bands)": {
-        "path": "samples/RGB_3band.tif",
-        "desc": "3-band RGB GeoTIFF — try RGB Composite & Color Space modes."
+    "🛰️ Landsat 8 — All Bands (7 bands)": {
+        "path": "samples/landsat8_allbands.tif",
+        "desc": "Full 7-band Landsat 8 scene (SR_B1–SR_B7). Try Spectral Filter, NDVI, SAVI, EVI and all RGB composites."
     },
-    "🛰️ RGBA Multi-band (4 bands)": {
-        "path": "samples/RGBA_4band.tif",
-        "desc": "4-band RGBA GeoTIFF — great for RGB Composite with 4th band experiments."
-    },
-    "🌐 World RGB (3 bands, global)": {
-        "path": "samples/World_RGB.tif",
-        "desc": "Small global RGB raster — fast to load, good for testing all modes."
+    "🌿 Landsat 8 — Multiband (4 bands)": {
+        "path": "samples/landsat8_multiband.tif",
+        "desc": "4-band subset (SR_B4, SR_B3, SR_B2, SR_B5). RGB Composite + Vegetation filters work great here."
     },
 }
 
