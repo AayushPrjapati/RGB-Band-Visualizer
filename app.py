@@ -443,14 +443,32 @@ with st.sidebar:
 # ─────────────────────────────────────────────
 if not st.session_state.image_data:
     # ── Welcome / Upload prompt ──
-    st.markdown("""
-    <div class="upload-zone">
-        <div style="font-size:4rem">🛰️</div>
-        <h3 style="color:#63b3ed; margin:12px 0 8px">Upload a Satellite Image to Begin</h3>
-        <p style="color:#718096">Supports GeoTIFF (.tif/.tiff), JPEG2000 (.jp2), PNG, JPG</p>
-        <p style="color:#718096; font-size:0.85rem">Works with Sentinel-2, Landsat-8, and generic multi-band imagery</p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown("<h3 style='color:#63b3ed; text-align:center;'>Upload a Satellite Image to Begin</h3>", unsafe_allow_html=True)
+    uploaded_main = st.file_uploader(
+        "Drag and drop your file here",
+        type=["tif", "tiff", "jp2", "jpg", "jpeg", "png", "bmp", "img"],
+        key="main_uploader",
+        help="Supports GeoTIFF, JP2, PNG, JPG. Works with Sentinel-2, Landsat-8, and generic multi-band imagery."
+    )
+
+    if uploaded_main:
+        try:
+            raw = uploaded_main.read()
+            with MemoryFile(raw) as mf:
+                with mf.open() as src:
+                    image_data = [src.read(i) for i in range(1, src.count + 1)]
+                    meta = src.meta.copy()
+                    band_names = (
+                        [d if d and d.strip() else f"Band {i+1}" for i, d in enumerate(src.descriptions)]
+                        if src.descriptions else [f"Band {i+1}" for i in range(src.count)]
+                    )
+            st.session_state.image_data = image_data
+            st.session_state.band_names = band_names
+            st.session_state.meta = meta
+            st.session_state.filename = uploaded_main.name
+            st.rerun()
+        except Exception as e:
+            st.error(f"❌ Failed to load: {e}")
 
     st.markdown("---")
     st.markdown("### 🔬 What This Tool Can Do")
