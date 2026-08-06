@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.egg-info/
+dist/
+build/
+.DS_Store
+Thumbs.db
+# Large binary files (sample images in exe folder, no need to push to GitHub)
+Project Exe/
+Source File/Saved Images/
