@@ -456,7 +456,7 @@ else:
                 "Grayscale": "gray", "Viridis": "viridis", "Plasma": "plasma",
                 "Inferno": "inferno", "Hot": "hot", "Cool": "cool"
             }
-            cmap = plt.cm.get_cmap(cmap_map[cmap_choice])
+            cmap = plt.colormaps[cmap_map[cmap_choice]]
             colored = (cmap(band_norm)[:, :, :3] * 255).astype(np.uint8)
             result_img = Image.fromarray(colored)
 
@@ -487,7 +487,7 @@ else:
         col_img, col_info = st.columns([3, 1])
 
         with col_img:
-            st.image(result_img, use_column_width=True, caption=f"📍 {st.session_state.filename} — {mode}")
+            st.image(result_img, use_container_width=True, caption=f"📍 {st.session_state.filename} — {mode}")
 
             # Download button
             img_bytes = pil_to_bytes(result_img)
