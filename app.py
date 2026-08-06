@@ -13,25 +13,24 @@ import requests
 # SAMPLE IMAGES
 # ─────────────────────────────────────────────
 SAMPLE_IMAGES = {
-    "🌍 RGB Natural (3-band GeoTIFF)": {
-        "url": "https://raw.githubusercontent.com/rasterio/rasterio/main/tests/data/RGB.byte.tif",
-        "desc": "A classic 3-band RGB GeoTIFF — great for RGB Composite & Color Space modes."
+    "🌍 RGB Natural (3 bands)": {
+        "path": "samples/RGB_3band.tif",
+        "desc": "3-band RGB GeoTIFF — try RGB Composite & Color Space modes."
     },
-    "🛰️ Multi-band Float (Sentinel-style)": {
-        "url": "https://raw.githubusercontent.com/rasterio/rasterio/main/tests/data/float32.tif",
-        "desc": "Single-band float raster — try Single Band mode with different colormaps."
+    "🛰️ RGBA Multi-band (4 bands)": {
+        "path": "samples/RGBA_4band.tif",
+        "desc": "4-band RGBA GeoTIFF — great for RGB Composite with 4th band experiments."
     },
-    "🌊 Small Raster (Quick Test)": {
-        "url": "https://raw.githubusercontent.com/rasterio/rasterio/main/tests/data/shade.tif",
-        "desc": "A small hillshade raster — fast to load, good for testing adjustments."
+    "🌐 World RGB (3 bands, global)": {
+        "path": "samples/World_RGB.tif",
+        "desc": "Small global RGB raster — fast to load, good for testing all modes."
     },
 }
 
-@st.cache_data(show_spinner="Fetching sample image...")
-def fetch_sample(url: str) -> bytes:
-    r = requests.get(url, timeout=15)
-    r.raise_for_status()
-    return r.content
+@st.cache_data(show_spinner="Loading sample image...")
+def load_sample(path: str) -> bytes:
+    with open(path, "rb") as f:
+        return f.read()
 
 # ─────────────────────────────────────────────
 # PAGE CONFIG
@@ -325,7 +324,7 @@ with st.sidebar:
         st.markdown(f'<div class="info-box">{sample_info["desc"]}</div>', unsafe_allow_html=True)
         if st.button("Load Sample", use_container_width=True):
             try:
-                raw = fetch_sample(sample_info["url"])
+                raw = load_sample(sample_info["path"])
                 with MemoryFile(raw) as mf:
                     with mf.open() as src:
                         image_data = [src.read(i) for i in range(1, src.count + 1)]
