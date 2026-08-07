@@ -19,7 +19,7 @@ The tool is hosted live on Streamlit Community Cloud. You can test it out with t
 👉 **[Live App: band-visualizer.streamlit.app](https://band-visualizer.streamlit.app)**
 
 Prefer a standalone desktop app? Download the older PyQt5 Windows executable:
-📥 **[Download Windows App (v1.0.0)](https://github.com/AayushPrjapati/RGB-Band-Visualizer/releases/download/v1.0.0/RGB_Visualizer_Windows.zip)**
+📥 **[Download Windows App (v1.0.7)](https://github.com/AayushPrjapati/RGB-Band-Visualizer/releases/download/v1.0.0/RGB_Visualizer_Windows.zip)**
 *(Extract the zip and run `main.exe`)*
 
 ## Running it locally
